@@ -6,6 +6,13 @@ interface IDeal {
 }
 
 contract DealFactory {
+    event DealCreated(
+        address[] _participants,
+        uint256 _price,
+        string _gistId,
+        string _gistHash
+    );
+
     //создаёт и хранит разные виды сделок
     address[] deals;
 
@@ -27,6 +34,8 @@ contract DealFactory {
         } else {
             // TODO
         }
+
+        emit DealCreated(_participants, _price, _gistId, _gistHash);
     }
 
     function issuedDeals() public view returns (address[] memory) {
@@ -80,8 +89,10 @@ contract PrivateDeal is IDeal {
         require(approvedByParticipant != true, "Deal has been approved");
         require(payed == price, "Deal hasn`t been paid");
 
-        payable(issuer).transfer(payed);
         approvedByParticipant = true;
+
+        (bool success, ) = issuer.call{value: payed}("");
+        require(success, "Transfer not successfuly executed");
     }
 
     receive() external payable onlyParticipant {

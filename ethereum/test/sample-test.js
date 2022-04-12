@@ -5,22 +5,16 @@ const chai = require("chai");
 
 chai.use(solidity);
 
-const PRICE = 10000;
+const PRICE = 10e14;
 
-describe("Greeter", async function () {
+describe("PrivateDeal", async function () {
   let deal, issuer, participant;
 
   beforeEach(async () => {
     const [_deployer, _participant] = await ethers.getSigners();
 
-    console.log("Deploying contracts with the account:", _deployer.address);
-
-    console.log("Account balance:", (await _deployer.getBalance()).toString());
-
     const PrivateDeal = await hre.ethers.getContractFactory("PrivateDeal");
     const privateDeal = await PrivateDeal.deploy(_participant.address, PRICE, 'test', 'test')
-
-    console.log("Greeter deployed to:", privateDeal.address);
 
     deal = privateDeal;
     issuer = _deployer;
@@ -37,7 +31,6 @@ describe("Greeter", async function () {
       value: ethers.BigNumber.from(PRICE),
     });
 
-    console.log(await deal.payed());
     expect(await deal.payed()).to.equal(PRICE);
   });
 
@@ -49,17 +42,22 @@ describe("Greeter", async function () {
     });
 
     const dealParticipant = deal.connect(participant)
+    const balanceBefore = await issuer.getBalance();
 
     await dealParticipant.approve('test', 'test');
 
     expect(await dealParticipant.approvedByParticipant()).to.equal(true);
+
+    const balanceAfter = await issuer.getBalance();
+
+    expect(balanceAfter.sub(balanceBefore)).to.equal(PRICE);
   });
 
 
   it("It checks that cannot approve twice", async function () {
     const tx = await participant.sendTransaction({
       to: deal.address,
-      value: ethers.BigNumber.from(PRICE),
+      value: ethers.BigNumber.from(PRICE)
     });
 
     const dealParticipant = deal.connect(participant)
