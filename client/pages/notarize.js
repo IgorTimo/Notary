@@ -4,11 +4,7 @@ import React, {useEffect, useState} from 'react'
 import { Input } from 'semantic-ui-react'
 import { Header } from 'semantic-ui-react'
 import { Button, Form , Submit} from 'semantic-ui-react'
-import axios from 'axios'
 
-
-//TODO: Надо написать компонент, который может либо принимать файл либо текст, который загрузил польователь. 
-//TODO: Хэшировать его и выводить хэш на экран. Пользоваться пакетом sha256, он уже импоритирован и работает
 
 const Notarize = (props) => {
     const [doc, setDoc] = useState("")
@@ -25,19 +21,19 @@ const Notarize = (props) => {
     }; 
   
       // On file upload (click the upload button) 
-    function onFileUpload() { 
-        const formData = new FormData(); // Create an object of formData  
-        formData.append("myFile",state.selectedFile, state.selectedFile.name); // Update the formData object 
+    // function onFileUpload() { 
+    //     const formData = new FormData(); // Create an object of formData  
+    //     formData.append("myFile",state.selectedFile, state.selectedFile.name); // Update the formData object 
 
-        console.log(state.selectedFile, state.selectedFile.name, state.selectedFile.type ); // Details of the uploaded file
+    //     console.log(state.selectedFile, state.selectedFile.name, state.selectedFile.type ); // Details of the uploaded file
   
-        // Request made to the backend api 
-        // Send formData object 
-        axios.post("notarize", formData)
-        .catch(error => console.error(error)); 
+    //     // Request made to the backend api 
+    //     // Send formData object 
+    //     axios.post("notarize", formData)
+    //     .catch(error => console.error(error)); 
 
-        setHashclickfile(sha256(formData))
-    }; 
+    //     setHashclickfile(sha256(formData))
+    // }; 
   
     function handleChange(event) {
         setDoc(event.target.value)

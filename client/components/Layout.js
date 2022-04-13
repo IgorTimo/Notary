@@ -1,9 +1,14 @@
 import "semantic-ui-css/semantic.min.css";
 import { Container } from "semantic-ui-react";
+import Header from "./Header";
 
-//TODO: надо дописать код так, чтобы компонент Header был вверху каждого компонента, находящегося внутри Layout
 const Layout = ({ children }) => {
-  return <Container>{children}</Container>;
+  return (
+    <Container>
+      <Header />
+      {children}
+    </Container>
+  );
 };
 
 export default Layout;
