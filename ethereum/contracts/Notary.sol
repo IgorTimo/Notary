@@ -7,6 +7,8 @@ interface IDeal {
 
 contract DealFactory {
     event DealCreated(
+        address issuer,
+        address dealAddress,
         address[] _participants,
         uint256 _price,
         string _gistId,
@@ -22,8 +24,10 @@ contract DealFactory {
         string memory _gistId,
         string memory _gistHash
     ) external {
+        IDeal deal;
+
         if (_participants.length == 1) {
-            IDeal deal = new PrivateDeal(
+           deal = new PrivateDeal(
                 _participants[0],
                 _price,
                 _gistId,
@@ -32,15 +36,17 @@ contract DealFactory {
 
             deals.push(address(deal));
         } else {
-            IDeal deal = new PublicDeal(
+           deal = new PublicDeal(
                 _participants,
                 _price,
                 _gistId,
                 _gistHash
             );
+
+            deals.push(address(deal));
         }
 
-        emit DealCreated(_participants, _price, _gistId, _gistHash);
+        emit DealCreated(msg.sender, address(deal), _participants, _price, _gistId, _gistHash);
     }
 
     function issuedDeals() public view returns (address[] memory) {
