@@ -3,6 +3,9 @@ import { Button, Menu } from "semantic-ui-react";
 import React, { Component, useState } from "react";
 import { useRouter } from "next/router";
 
+
+//TODO: сделать чтобы адрес после входа автоматически менялся, если меняется адрес в метамаске
+
 const Header = (props) => {
   const [textButton, setTextButton] = useState("Войти");
   const router = useRouter();
