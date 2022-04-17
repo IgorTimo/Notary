@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Form, Grid } from "semantic-ui-react";
+import { Form, Grid, Message } from "semantic-ui-react";
 import Layout from "../components/Layout";
 import { postDeal } from "../utils/dealApi";
 
@@ -10,20 +10,33 @@ import { postDeal } from "../utils/dealApi";
 // TODO: Посмотреть все записи в бд можно гетзапросом на https://simple-hash-server-mcs.herokuapp.com/
 
 const initialFormState = {
-  title: null,
-  text: null,
+  title: "",
+  text: "",
   dealType: null,
 };
 
 const CreateDeal = () => {
+  const [isHintShown, setHintState] = useState(false);
+  const [hash, setHash] = useState(null);
   const [form, setForm] = useState(initialFormState);
+
   const { title, text, dealType } = form;
 
   const handleFormChange = (e, { name, value }) => {
     setForm({ ...form, [name]: value });
   };
   const handleFormSubmit = async (e) => {
-    await postDeal(form);
+    const res = await postDeal(form);
+
+    if (res && res.hash) {
+      setHash(res.hash);
+      setHintState(true);
+      setForm(initialFormState);
+      setTimeout(() => setHintState(false), 5000);
+    }
+  };
+  const submitBtnValidator = () => {
+    return !(title && text && dealType);
   };
 
   return (
@@ -36,12 +49,14 @@ const CreateDeal = () => {
               placeholder="Заголовок"
               label="Заголовок"
               name="title"
+              value={title}
               onChange={handleFormChange}
             />
             <Form.TextArea
               placeholder="Текст сделки"
               label="Текст сделки"
               name="text"
+              value={text}
               onChange={handleFormChange}
             />
 
@@ -60,9 +75,15 @@ const CreateDeal = () => {
               onChange={handleFormChange}
             />
             <Form.Button
-              disabled={!(title && text && dealType)}
+              disabled={submitBtnValidator()}
               content="Создать сделку"
             />
+            {isHintShown && (
+              <Message>
+                <Message.Header>Сделка создана!</Message.Header>
+                <p>Хэш сделки: {hash}</p>
+              </Message>
+            )}
           </Grid.Column>
         </Grid>
       </Form>
