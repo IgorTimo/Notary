@@ -15,7 +15,6 @@ contract DealFactory {
         string _gistHash
     );
 
-    //создаёт и хранит разные виды сделок
     address[] deals;
 
     function issue(
@@ -55,7 +54,6 @@ contract DealFactory {
 }
 
 contract PrivateDeal is IDeal {
-    // создаёт прииватную сделку. для это нужен адрес билдера, адрес покупателя, цена, id и хэш гиста
     address issuer;
     address participant;
 
@@ -172,4 +170,22 @@ contract PublicDeal is IDeal {
         require(dealPrice == msg.value, "You should pay exact value of deal");
         paid[msg.sender] = uint256(msg.value);
     }
+}
+
+
+contract NotarizedDocumentFactory {
+  //TODO: фабрика, которая создаёт заверенные документы и складывает их адреса в массив внутри себя
+}
+
+abstract contract NotarizedDocument {
+  //TODO: общий родитель HashNotarizedDocument и TextNotarizedDocument, который содержит общую информацию заверителя и всё что ещё придумаете
+  //TODO: должен содержать какие-то способы для чтения HashNotarizedDocument и TextNotarizedDocument одинаковым способом
+}
+
+contract HashNotarizedDocument {
+  //TODO: принимает теекст, хэширует его но записывает только хэш
+}
+
+contract TextNotarizedDocument {
+  //TODO: принимает теекст, хэширует его и записывает всё. Как раз и сравним расход газа
 }
