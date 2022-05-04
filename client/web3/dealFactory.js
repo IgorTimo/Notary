@@ -1,6 +1,5 @@
 import { ethers } from "ethers";
-import provider from './provider';
-
+import provider from "./provider";
 
 const address = "0x7956329905cE786AA256E2f3F79bb4B51f80C681";
 
@@ -91,7 +90,6 @@ const abi = [
   },
 ];
 
-
-const dealFactory = null; //TODO: написать подключенное состояние dealFactory используя address, abi, provider
+const dealFactory = new ethers.Contract(address, abi, provider); //TODO: написать подключенное состояние dealFactory используя address, abi, provider
 
 export default dealFactory;

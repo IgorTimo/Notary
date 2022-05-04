@@ -1,17 +1,12 @@
 import { Card } from "semantic-ui-react";
 
 const CardItem = ({ list }) => {
-  const onCardClick = (gistId) => console.log(gistId);
-
-  return list.map(({ title, owner, gistId, gistHash }) => (
+  return list.map(({ title, hash }) => (
     <Card
-      onClick={() => onCardClick(gistId)}
-      key={gistId}
-      href={`#${gistId}`} /*mock href*/
+      key={hash}
+      href={`deal/${hash}`}
       header={title}
-      meta={`GistId: ${gistId}`}
-      extra={`Автор: ${owner}`}
-      description={`GistHash: ${gistHash}`}
+      description={`Hash: ${hash}`}
     />
   ));
 };
